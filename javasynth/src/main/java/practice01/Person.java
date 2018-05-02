@@ -1,6 +1,14 @@
 package practice01;
 
 public class Person {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
     private  String name;
     private Integer age;
     public Person(String name,int age){
