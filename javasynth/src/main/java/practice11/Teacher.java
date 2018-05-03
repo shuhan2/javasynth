@@ -1,9 +1,11 @@
 package practice11;
 
-import java.util.Iterator;
+import java.util.HashSet;
+//import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 
-public class Teacher extends Person{
+public class Teacher extends Person implements Observer {
     public Klass getKlass() {
         return klass;
     }
@@ -18,22 +20,25 @@ public class Teacher extends Person{
         return classes;
     }
 
-    public void setClasses(Set<Klass> classes) {
+    public void setClasses(HashSet<Klass> classes) {
         this.classes = classes;
     }
 
-    public Set<Klass> classes;
-    public Teacher(int id,String name,int age,Set<Klass> classes){
-        super(id,name,age);
-        this.classes = classes;
-        for(Klass klass : classes){
-            klass.setTeacher(this);
-        }
-    }
+    public Set<Klass> classes = new TreeSet<>();
     public Teacher(int id,String name,int age){
         super(id,name,age);
 
     }
+    public Teacher(int id,String name,int age,HashSet<Klass> classes){
+        super(id,name,age);
+        this.classes = classes;
+
+        for(Klass klass : this.classes){
+            klass.addTeachers(this);
+        }
+    }
+
+    @Override
     public String introduce(){
         Person person = new Person(id,name,age);
         String result ;
@@ -42,9 +47,9 @@ public class Teacher extends Person{
         }
         else {
             result = person.introduce() + " I am a Teacher. I teach Class " ;
-            Iterator<Klass> it = this.classes.iterator();
-            while (it.hasNext()){
-                result = result+ it.next().number+", ";
+
+            for(Klass klass : classes){
+                result = result+ klass.number+", ";
             }
             result= result.substring(0,result.length()-2);
             result+=".";
@@ -65,5 +70,14 @@ public class Teacher extends Person{
         return classes.contains(student.klass);
     }
 
+    @Override
+    public void know_Leader(Student student) {
+        System.out.print("I am "+this.name+". I know "+student.name+" become Leader of Class "+this.klass.number+".\n");
+    }
+
+    @Override
+    public void know_Student(Student student) {
+        System.out.print("I am "+this.name+". I know "+student.name+" has joined Class "+this.klass.number+".\n");
+    }
 
 }

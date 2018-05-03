@@ -3,8 +3,11 @@ package practice11;
 
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
-public class Klass {
+
+public class Klass implements Comparable<Klass>, Observed{
+    private LinkedHashSet<Observer> teachers = new LinkedHashSet<>();
     public int getNumber() {
         return number;
     }
@@ -46,9 +49,12 @@ public class Klass {
         if (member.contains(student)) {
             leader = student;
             if(this.getTeacher()!=null) {
-                String result = "I am " + this.getTeacher().getName() + ". I know " + leader.getName() + " become Leader of Class " + this.getNumber() + ".\n";
-                System.out.print(result);
+//                String result = "I am " + this.getTeacher().getName() + ". I know " + leader.getName() + " become Leader of Class " + this.getNumber() + ".\n";
+//                System.out.print(result);
+
+                inform_Leader(leader);
             }
+
         }
         else{
             System.out.print("It is not one of us.\n");
@@ -57,8 +63,34 @@ public class Klass {
     public void appendMember (Student student){
         member.add(student);
         if(this.getTeacher()!=null) {
-            String result = "I am " + this.getTeacher().getName() + ". I know " + student.getName() + " has joined Class " + this.getNumber() + ".\n";
-            System.out.print(result);
+            inform_Student(student);
         }
+    }
+    public void addTeachers(Observer observer){
+        teachers.add(observer);
+    }
+
+    @Override
+    public int compareTo(Klass o) {
+        return 0;
+    }
+
+    @Override
+    public void inform_Leader(Student student) {
+        for (Observer teacher : teachers) {
+            teacher.know_Leader(student);
+        }
+    }
+
+    @Override
+    public void inform_Student(Student student) {
+        for (Observer teacher : teachers) {
+            teacher.know_Student(student);
+        }
+    }
+
+    @Override
+    public void addTeacher(Teacher teacher) {
+        teachers.add(teacher);
     }
 }
